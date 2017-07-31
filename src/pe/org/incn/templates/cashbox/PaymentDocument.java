@@ -21,14 +21,10 @@ public class PaymentDocument  extends Printable{
     }
 
     @Override
-    protected void drawing() throws JposException {
+    public void canvas() throws JposException {
+        this.getWriter()
+                .centerWords("Instituto Nacional de Ciencias Neurológicas".toUpperCase())
+                .writeLine("Documento de pago");
         
-        this.writeLine("text");
-        this.jump();
-        this.writeLine("text");
-        this.writeLine("text");
-        this.writeLine("text");
-        this.jump(2);
-        this.writeLine("text");
     }    
 }
