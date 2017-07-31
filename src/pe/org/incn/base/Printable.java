@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jpos.JposException;
 import jpos.POSPrinterConst;
+import pe.org.incn.main.Configuration;
 
 
 /**
@@ -13,8 +14,8 @@ import jpos.POSPrinterConst;
 public abstract class Printable {
 
     protected EpsonPrintable printer;
-
-    protected final String HEX = "\u001b|";
+    
+    protected WriterContract writer;
     
     /**
      * Printable constructor.
@@ -23,6 +24,7 @@ public abstract class Printable {
      */
     public Printable(EpsonPrintable printer) {
         this.printer = printer;
+        this.writer = Configuration.mainWriter(printer);
     } 
     
     /**
@@ -35,7 +37,7 @@ public abstract class Printable {
         try {
             this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_TRANSACTION);
 
-            this.drawing();
+            this.canvas();
             
             this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_NORMAL);
         } catch (JposException ex) {
@@ -44,40 +46,25 @@ public abstract class Printable {
         
         return this;
     }
-   
     
     /**
-     * Write a text in the document.
+     * Return to main writer.
      *
-     * @param text
-     * @return EpsonPrintable
-     * @throws JposException
+     * @return WriterContract
      */
-    protected EpsonPrintable write(String text) throws JposException
+    public WriterContract getWriter()
     {
-        this.printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, HEX.concat(text));
-        return this.printer;
+        return this.writer;
     }
-
-    /**
-     * Write a text and jump line.
-     *
-     * @param text
-     * @return
-     * @throws JposException
-     */
-    protected EpsonPrintable writeLine(String text) throws JposException
-    {
-        return this.write(text.concat("\n"));
-    }
+    
     
     /**
      * Draw a line break.
      *
-     * @return EpsonPrintable
+     * @return Printable
      * @throws JposException
      */
-    protected EpsonPrintable jump() throws JposException
+    public Printable jump() throws JposException
     {
         return this.jump(1);
     }
@@ -86,20 +73,21 @@ public abstract class Printable {
      * Draw one or more line breaks.
      *
      * @param lines
-     * @return EpsonPrintable
+     * @return Printable
      * @throws JposException
      */
-    protected EpsonPrintable jump(int lines) throws JposException
+    public Printable jump(int lines) throws JposException
     {
         lines *= 10;
-        return this.write(lines + Command.BREAK);
+        this.getWriter().writeLine(lines + Command.BREAK);
+        return this;
     }
-        
+           
     /**
      * Draws the document to be printed.
      *
      * @throws jpos.JposException
      */
-    protected abstract void drawing() throws JposException;
+    protected abstract void canvas() throws JposException;
     
 }
