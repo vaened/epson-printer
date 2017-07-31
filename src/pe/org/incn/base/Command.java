@@ -27,14 +27,39 @@ public class Command {
     public static final String BOLD = "\u001b|bC";
 
     /**
+     * Underline text.
+     */
+    public static final String UNDERLINE = "\u001b|uC";
+
+    /**
      * Center text.
      */
     public static final String CENTER = "\u001b|cA";
     
     /**
+     * Right text.
+     */
+    public static final String RIGHT = "\u001b|rA";
+    
+    /**
      * Write a command.
      */
     public static final String HEX = "\u001b|";
+
+    /**
+     * Normal size text.
+     */
+    public static final String NORMAL_SIZE = "\u001b|1C";
+
+    /**
+     * Medium-sized text
+     */
+    public static final String MEDIUM_SIZE = "\u001b|2C";
+
+    /**
+     * Large size text
+     */
+    public static final String LARGE_SIZE = "\u001b|4C";
 
     /**
      * Convert a text to bold.
