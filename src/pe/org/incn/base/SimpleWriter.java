@@ -2,6 +2,7 @@ package pe.org.incn.base;
 
 import jpos.JposException;
 import jpos.POSPrinterConst;
+import pe.org.incn.support.CollectionUtils;
 
 /**
  * SimpleWriter
@@ -26,12 +27,12 @@ public class SimpleWriter implements WriterContract {
      *
      * @param text
      * @param commands
+     * @param overrideCommands
      * @return
      * @throws jpos.JposException
      */
-    public WriterContract writer(String text, String... commands) throws JposException {
-
-        String command = Command.prepare(commands);
+    public WriterContract writer(String text, String[] commands, String[] overrideCommands) throws JposException {
+        String command = Command.prepare(CollectionUtils.join(commands, overrideCommands));
         this.printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, command.concat(text));
         return this;
     }
@@ -40,19 +41,9 @@ public class SimpleWriter implements WriterContract {
      * {@inheritDoc }
      */
     @Override
-    public WriterContract writeBoldLine(String text) throws JposException {
-        return this.writer(text, new String[]{
-            Command.BLANK_LINE,
-            Command.BOLD
-        });
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public WriterContract writeLine(String text) throws JposException {
-        return this.writer(text, new String[]{
+    public WriterContract writeBoldLine(String text, String... commands) throws JposException {
+        return this.writer(text, commands, new String[]{
+            Command.BOLD,
             Command.BLANK_LINE
         });
     }
@@ -61,10 +52,20 @@ public class SimpleWriter implements WriterContract {
      * {@inheritDoc }
      */
     @Override
-    public WriterContract centerWords(String text) throws JposException {
-        this.centering(text, new String[]{
+    public WriterContract writeLine(String text, String... commands) throws JposException {
+        return this.writer(text, commands, new String[]{
+            Command.BLANK_LINE            
+        });
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public WriterContract centerWords(String text, String... commands) throws JposException {
+        this.centering(text, commands, new String[]{
             Command.CENTER,
-            Command.BLANK_LINE
+            Command.BLANK_LINE            
         });
 
         return this;
@@ -74,7 +75,7 @@ public class SimpleWriter implements WriterContract {
      * {@inheritDoc }
      */
     @Override
-    public WriterContract centerBoldWords(String text) throws JposException {
+    public WriterContract centerBoldWords(String text, String... commands) throws JposException {
         this.centering(text, new String[]{
             Command.CENTER,
             Command.BOLD,
@@ -89,14 +90,15 @@ public class SimpleWriter implements WriterContract {
      *
      * @param text
      * @param commands
+     * @param overrideCommands
      * @throws JposException
      */
-    protected void centering(String text, String[] commands) throws JposException {
+    protected void centering(String text, String[] commands, String... overrideCommands) throws JposException {
         int length = text.length(),
                 max_width = this.getMaxWith();
 
         if (length <= max_width) {
-            this.writer(text, commands);
+            this.writer(text, commands, overrideCommands);
             return;
         }
 
@@ -108,8 +110,8 @@ public class SimpleWriter implements WriterContract {
             prev = prev.substring(0, found);
         }
 
-        this.writer(prev, commands);
-        centering(text.substring(found, length), commands);
+        this.writer(prev, commands, overrideCommands);
+        centering(text.substring(found, length), commands, overrideCommands);
     }
     
     /**

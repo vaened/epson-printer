@@ -13,35 +13,39 @@ public interface WriterContract {
      * Write bold text in the document.
      *
      * @param text
+     * @param commands
      * @return
      * @throws JposException
      */
-    public WriterContract writeBoldLine(String text) throws JposException;
+    public WriterContract writeBoldLine(String text, String... commands) throws JposException;
 
     /**
      * Write bold text in the document.
      *
      * @param text
+     * @param commands
      * @return
      * @throws JposException
      */
-    public WriterContract writeLine(String text) throws JposException;
+    public WriterContract writeLine(String text, String... commands) throws JposException;
 
     /**
      * Center bold text in the document
      *
      * @param text
+     * @param commands
      * @return
      * @throws JposException
      */
-    public WriterContract centerBoldWords(String text) throws JposException;
+    public WriterContract centerBoldWords(String text, String... commands) throws JposException;
 
     /**
      * Center text in the document
      *
      * @param text
+     * @param commands
      * @return
      * @throws JposException
      */
-    public WriterContract centerWords(String text) throws JposException;
+    public WriterContract centerWords(String text, String... commands) throws JposException;
 }
