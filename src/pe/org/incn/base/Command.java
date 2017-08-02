@@ -3,6 +3,8 @@ package pe.org.incn.base;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import pe.org.incn.support.Helpers;
 
 /**
  * Command
@@ -35,12 +37,12 @@ public class Command {
      * Center text.
      */
     public static final String CENTER = "\u001b|cA";
-    
+
     /**
      * Right text.
      */
     public static final String RIGHT = "\u001b|rA";
-    
+
     /**
      * Write a command.
      */
@@ -64,18 +66,26 @@ public class Command {
     /**
      * Convert a text to bold.
      *
+     * @param text
      * @param commands
      * @return
      */
-    public static String prepare(String[] commands) {
-        List<String> list = new ArrayList(Arrays.asList(commands));
+    public static String prepare(String text, String[] commands) {
+        List<String> listCommands = Arrays.asList(commands).stream().distinct().map(Object::toString).collect(Collectors.toList());
+        boolean WRITE_BLANK_LINE;
 
-        if (list.contains(BLANK_LINE)) {
-            list.remove(BLANK_LINE);
-            list.add(BLANK_LINE);
+        if (WRITE_BLANK_LINE = listCommands.contains(BLANK_LINE)) {
+            System.err.println("blank_line - " + text);
+            listCommands.remove(BLANK_LINE);
         }
 
-        String join = String.join("", commands);
-        return Command.HEX.concat(join);
+        String command = String.join("", listCommands);
+        text = Helpers.concat(command, text);
+
+        if (WRITE_BLANK_LINE) {
+            text += BLANK_LINE;
+        }
+
+        return text;
     }
 }
