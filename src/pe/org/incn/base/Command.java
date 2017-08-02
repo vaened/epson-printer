@@ -25,6 +25,11 @@ public class Command {
     /**
      * Bold text.
      */
+    public static final String NORMAL = "\u001b|N";
+
+    /**
+     * Bold text.
+     */
     public static final String BOLD = "\u001b|bC";
 
     /**
@@ -69,7 +74,7 @@ public class Command {
      * @param commands
      * @return
      */
-    public static String prepare(String text, String[] commands) {
+    public static String prepare(String text, String... commands) {
         List<String> listCommands = Arrays.asList(commands).stream().distinct().map(Object::toString).collect(Collectors.toList());
         boolean WRITE_BLANK_LINE;
 
