@@ -6,25 +6,28 @@
 
 package pe.org.incn.main;
 
+import java.awt.SystemTray;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jpos.JposException;
 import jpos.util.JposPropertiesConst;
+import org.json.JSONException;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.Printer;
-import pe.org.incn.templates.cashbox.PaymentDocument;
+import pe.org.incn.support.Navbar;
 
 
 /**
  *
  * @author enea <enea.so@live.com>
  */
-public class Server {
-
+public class Main {
+   
+    
     public static void main(String[] args) {
+        EpsonPrintable printer = new Printer();
         try {
-            
-            EpsonPrintable printer = new Printer();
             
             System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "C:\\jpos.xml");
             
@@ -38,12 +41,23 @@ public class Server {
 
             //Enable the device.
             printer.setDeviceEnabled(true);
-            PaymentDocument s = new PaymentDocument(printer);
-            s.draw();
             
-            System.exit(0);
+            
+            
         } catch (JposException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (SystemTray.isSupported()) {
+            new Navbar().loadMenu();
+        }
+        
+        PrinterServer connection = new PrinterServer(printer);
+        
+        try {
+            connection.open();
+        } catch (IOException | JSONException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
