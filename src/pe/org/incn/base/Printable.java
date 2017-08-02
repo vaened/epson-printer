@@ -58,7 +58,6 @@ public abstract class Printable {
                     printer.setBitmap(1, POSPrinterConst.PTR_S_RECEIPT, "C:\\logo.bmp",
                             (printer.getRecLineWidth() / 3), POSPrinterConst.PTR_BM_CENTER);
 
-                    System.err.println("yasasd");
                     bSetBitmapSuccess = true;
                     break;
                 } catch (JposException ex) {

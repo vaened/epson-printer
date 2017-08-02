@@ -1,6 +1,5 @@
 package pe.org.incn.base;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +74,6 @@ public class Command {
         boolean WRITE_BLANK_LINE;
 
         if (WRITE_BLANK_LINE = listCommands.contains(BLANK_LINE)) {
-            System.err.println("blank_line - " + text);
             listCommands.remove(BLANK_LINE);
         }
 

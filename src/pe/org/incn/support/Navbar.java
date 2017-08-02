@@ -1,9 +1,7 @@
 package pe.org.incn.support;
 
 import java.awt.AWTException;
-import java.awt.CheckboxMenuItem;
 import java.awt.Image;
-import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -32,15 +30,15 @@ public class Navbar {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int config = JOptionPane.showConfirmDialog(null, "¿Seguro que desea cerrar el servidor?", "Cuidado",  
-                        JOptionPane.YES_NO_OPTION, 
+                int config = JOptionPane.showConfirmDialog(null, "¿Seguro que desea cerrar el servidor?", "Cuidado",
+                        JOptionPane.YES_NO_OPTION,
                         JOptionPane.INFORMATION_MESSAGE);
                 if (config == 0) {
                     System.exit(0);
                 }
             }
         });
-        
+
         popup.add(restart);
         popup.add(exit);
         popup.addSeparator();

@@ -16,7 +16,6 @@ public class Helpers {
      */
     public static boolean existInStringArray(String[] elements, String value) {
         for (String element : elements) {
-            System.err.println(element + " - " + value);
             if (element.equals(value)) {
                 return true;
             }
