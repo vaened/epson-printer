@@ -1,14 +1,8 @@
 package pe.org.incn.main;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-import jpos.CashDrawer;
-import jpos.CashDrawerControl113;
-import jpos.POSPrinter;
+import pe.org.incn.base.EpsonPrintable;
+import pe.org.incn.base.SimpleWriter;
+import pe.org.incn.base.WriterContract;
 
 /**
  * @author enea <enea.so@live.com>
@@ -16,77 +10,34 @@ import jpos.POSPrinter;
 public class Configuration {
 
     /**
-     * Defines the name of the ticker printer.
+     * Key containing the request body.
      */
-    public static String printDefaultName = "Generic / Text Only";
-
-    /**
-     * Establishes the need to display the print dialog.
-     */
-    public static boolean printDialog = false;
+    public static String MAIN_CONTRAINER_KEY = "body";
     
     /**
-     * Object containing the configuration.
+     * Key that contains the name of the module in the request.
      */
-    protected Properties properties;
-
-    /**
-     * Path to configuration.
-     */
-    protected static final String PATH = "C:\\";
+    public static String MODULE_CONTAINER_KEY = "module";
     
     /**
-     * File to configuration.
+     * Key that contains the name of the template to use.
      */
-    protected static final String FILE = "settei.properties";
+    public static String TEMPLATE_CONTAINER_KEY = "template";
+
+    /**
+     * Key containing the data in the request.
+     */
+    public static String DATA_CONTAINER_KEY = "data";
+    
     
     /**
-     * Constructor.
-     * 
-     * @param properties
-     */
-    public Configuration(Properties properties) {
-        this.properties = properties;
-    }
-
-    public void load() {
-        InputStreamReader in = null;
-
-        try {
-            in = new InputStreamReader(new FileInputStream(this.fileName()), "UTF-8");
-            
-            this.properties.load(in);
-            
-            POSPrinter  printer = new POSPrinter();
-            CashDrawerControl113 drawer = (CashDrawerControl113) new CashDrawer();
-            
-            Configuration.printDialog = this.properties.getProperty(printDefaultName, "false").equals("true");            
-            Configuration.printDefaultName = this.properties.getProperty("print_default_name", "Generic / Text Only");
-            
-        } catch (UnsupportedEncodingException | FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        } finally {
-            if (null != in) {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
-        }
-
-    }
-    
-    /**
-     * Build the configuration file name.
+     * Return the main writer.
      *
-     * @return String
+     * @param printer
+     * @return WriterContract
      */
-    protected String fileName()
-    {
-        return PATH.concat("\\").concat(FILE);
-    }
+    public static WriterContract mainWriter(EpsonPrintable printer) {
+        return new SimpleWriter(printer);
 
+    }
 }
