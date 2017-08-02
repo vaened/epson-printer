@@ -39,4 +39,16 @@ public class Helpers {
 
         return out;
     }
+
+    /**
+     * Right autocomplete.
+     *
+     * @param text
+     * @param quantity
+     * @return
+     */
+    public static String rightAutocomplete(String text, Integer quantity) {
+        String exp = concat("%-", quantity.toString(), "s");
+        return String.format(exp, text);
+    }
 }
