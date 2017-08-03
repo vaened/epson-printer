@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package pe.org.incn.main;
 
 import java.awt.SystemTray;
@@ -17,20 +16,18 @@ import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.Printer;
 import pe.org.incn.support.Navbar;
 
-
 /**
  *
  * @author enea <enea.so@live.com>
  */
 public class Main {
-   
     
     public static void main(String[] args) {
         EpsonPrintable printer = new Printer();
         try {
             
             System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "C:\\jpos.xml");
-            
+
             //Open the device.
             //Use the name of the device that connected with your computer.
             printer.open("POSPrinter");
@@ -42,7 +39,7 @@ public class Main {
             //Enable the device.
             printer.setDeviceEnabled(true);
             
-            
+            Configuration.setCanvasMaxWith(printer.getRecLineChars());
             
         } catch (JposException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

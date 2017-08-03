@@ -1,6 +1,9 @@
 package pe.org.incn.base;
 
 import jpos.JposException;
+import pe.org.incn.base.support.Groupable;
+import pe.org.incn.base.support.models.WordsGroupMultiLine;
+import pe.org.incn.base.support.Writer;
 
 /**
  * WriterContract
@@ -82,4 +85,13 @@ public interface WriterContract {
      * @throws JposException
      */
     public WriterContract groupWords(String label, String text, String... commands) throws JposException;
+
+    /**
+     * Contains multiple text groups.
+     *
+     * @param groupable
+     * @return
+     * @throws JposException
+     */
+    public WriterContract wrapper(Groupable... groupable) throws JposException;
 }
