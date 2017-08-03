@@ -48,7 +48,11 @@ public class Helpers {
      * @return
      */
     public static String rightAutocomplete(String text, Integer quantity) {
-        String exp = concat("%-", quantity.toString(), "s");
-        return String.format(exp, text);
+        if (quantity > 0) {
+            String exp = concat("%-", quantity.toString(), "s");
+            return String.format(exp, text);
+        }
+
+        return text;
     }
 }
