@@ -1,5 +1,7 @@
 package pe.org.incn.base.support.models;
 
+import pe.org.incn.support.Helpers;
+
 /**
  * WordsGroupOneLine
  *
@@ -21,7 +23,16 @@ public class WordsGroupOneLine extends BaseWordsGroup {
      * {@inheritDoc}
      */
     @Override
-    public boolean isOneLine() {
-        return false;
+    public String getCleanLabelWithSpaces() {
+        return this.getCleanLabel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getCleanTextWithSpaces() {
+        String spaces = Helpers.rightAutocomplete("", this.getWidthPerWord() - this.getCleanLength());
+        return this.getCleanText().concat(spaces);
     }
 }

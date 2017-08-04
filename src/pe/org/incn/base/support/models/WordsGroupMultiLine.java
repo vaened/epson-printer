@@ -1,5 +1,7 @@
 package pe.org.incn.base.support.models;
 
+import pe.org.incn.main.Configuration;
+
 /**
  * WordsGroupMultiLine
  *
@@ -18,10 +20,10 @@ public class WordsGroupMultiLine extends BaseWordsGroup {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc }
      */
     @Override
-    public boolean isOneLine() {
-        return false;
+    public boolean isValidLength() {
+        return Configuration.getCanvasMaxWidth() >= Math.max(this.getCleanLabelLength(), this.getCleanTextLength());
     }
 }
