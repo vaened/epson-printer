@@ -2,8 +2,6 @@ package pe.org.incn.base;
 
 import jpos.JposException;
 import pe.org.incn.base.support.Groupable;
-import pe.org.incn.base.support.models.WordsGroupMultiLine;
-import pe.org.incn.base.support.Writer;
 
 /**
  * WriterContract

@@ -1,7 +1,14 @@
 package pe.org.incn.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import jpos.JposException;
 import jpos.POSPrinterConst;
+import pe.org.incn.base.support.GroupLine;
+import pe.org.incn.base.support.Groupable;
+import pe.org.incn.base.support.Writer;
+import pe.org.incn.base.support.models.BaseWordsGroup;
+import pe.org.incn.main.Configuration;
 import pe.org.incn.support.CollectionUtils;
 import pe.org.incn.support.Helpers;
 
@@ -98,6 +105,31 @@ public class SimpleWriter implements WriterContract {
     }
 
     /**
+     * {@inheritDoc }
+     */
+    @Override
+    public WriterContract wrapper(Groupable... groupable) throws JposException {
+        List<BaseWordsGroup> groups = new ArrayList<>();
+
+        for (Groupable group : groupable) {
+            groups.add(group.group(new Writer()));
+        }
+
+        for (BaseWordsGroup group : groups) {
+            if (group.isValidLength()) {
+                continue;
+            }
+
+            System.err.println(group.getPlainLabel() + "-" + group.getPlainText());
+            this.groupWords(group.getPlainLabel(), group.getPlainText());
+        }
+
+        GroupLine groupLine = new GroupLine(groups.stream().filter(x -> x.isValidLength()));
+
+        return this.write(groupLine.make(), new String[]{});
+    }
+
+    /**
      * Group text and label
      *
      * @param label
@@ -134,7 +166,7 @@ public class SimpleWriter implements WriterContract {
                 max_width = this.getMaxWith();
 
         if (Helpers.existInStringArray(commands, Command.LARGE_SIZE) || Helpers.existInStringArray(commands, Command.MEDIUM_SIZE)) {
-            max_width /= 2;
+            max_width = this.getMiddleWidth();
         }
 
         if (length <= max_width) {
@@ -161,6 +193,16 @@ public class SimpleWriter implements WriterContract {
      * @throws JposException
      */
     protected int getMaxWith() throws JposException {
-        return this.printer.getRecLineChars();
+        return Configuration.getCanvasMaxWidth();
+    }
+
+    /**
+     * Returns the middle width of the canvas.
+     *
+     * @return
+     * @throws JposException
+     */
+    protected int getMiddleWidth() throws JposException {
+        return this.getMaxWith() / 2;
     }
 }
