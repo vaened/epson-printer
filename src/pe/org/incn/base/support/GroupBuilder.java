@@ -1,9 +1,7 @@
 package pe.org.incn.base.support;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,11 +10,11 @@ import pe.org.incn.main.Configuration;
 import pe.org.incn.support.Helpers;
 
 /**
- * GroupLine
+ * GroupBuilder
  *
  * @author enea <enea.so@live.com>
  */
-public class GroupLine {
+public class GroupBuilder {
 
     private final Stream<BaseWordsGroup> group;
 
@@ -25,7 +23,7 @@ public class GroupLine {
      *
      * @param group
      */
-    public GroupLine(Stream<BaseWordsGroup> group) {
+    public GroupBuilder(Stream<BaseWordsGroup> group) {
         this.group = group;
     }
 
@@ -48,7 +46,8 @@ public class GroupLine {
     }
 
     /**
-     *
+     * built groups.
+     * 
      * @param groupList
      * @return
      */
@@ -106,7 +105,7 @@ public class GroupLine {
     }
 
     /**
-     * returns true is occupied full line
+     * Returns true if full width is used.
      *
      * @param group
      * @return
@@ -116,6 +115,7 @@ public class GroupLine {
     }
 
     /**
+     * Returns the middle width.
      *
      * @return
      */

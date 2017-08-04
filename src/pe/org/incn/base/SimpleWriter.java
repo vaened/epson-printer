@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jpos.JposException;
 import jpos.POSPrinterConst;
-import pe.org.incn.base.support.GroupLine;
+import pe.org.incn.base.support.GroupBuilder;
 import pe.org.incn.base.support.Groupable;
 import pe.org.incn.base.support.Writer;
 import pe.org.incn.base.support.models.BaseWordsGroup;
@@ -124,7 +124,7 @@ public class SimpleWriter implements WriterContract {
             this.groupWords(group.getPlainLabel(), group.getPlainText());
         }
 
-        GroupLine groupLine = new GroupLine(groups.stream().filter(x -> x.isValidLength()));
+        GroupBuilder groupLine = new GroupBuilder(groups.stream().filter(x -> x.isValidLength()));
 
         return this.write(groupLine.make(), new String[]{});
     }
