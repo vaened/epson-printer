@@ -67,7 +67,7 @@ public class Helpers {
      * @param chunksize
      * @return
      */
-    public <T> List<List<T>> divideList(List<T> source, int chunksize) {
+    public static <T> List<List<T>> divideList(List<T> source, int chunksize) {
         List<List<T>> result = new ArrayList<>();
         int start = 0;
         while (start < source.size()) {
