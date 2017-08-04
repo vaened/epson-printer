@@ -1,5 +1,8 @@
 package pe.org.incn.support;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Helpers
  *
@@ -54,5 +57,25 @@ public class Helpers {
         }
 
         return text;
+    }
+
+    /**
+     * Split a list into multiple lists.
+     *
+     * @param <T>
+     * @param source
+     * @param chunksize
+     * @return
+     */
+    public <T> List<List<T>> divideList(List<T> source, int chunksize) {
+        List<List<T>> result = new ArrayList<>();
+        int start = 0;
+        while (start < source.size()) {
+            int end = Math.min(source.size(), start + chunksize);
+            result.add(source.subList(start, end));
+            start += chunksize;
+        }
+        
+        return result;
     }
 }
