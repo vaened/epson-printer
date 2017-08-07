@@ -20,8 +20,8 @@ public class CashboxModule extends BaseModule {
     @Override
     public Printable buildTemplate(String template, JSONObject json) throws NotFoundTemplateException {
         switch (template) {
-            case "payment-document":
-                return new PaymentDocument(json, this.printer);
+            case "invoice":
+                return new InvoiceTemplate(json, this.printer);
         }
 
         throw new NotFoundTemplateException();
