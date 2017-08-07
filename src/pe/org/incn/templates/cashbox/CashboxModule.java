@@ -22,6 +22,8 @@ public class CashboxModule extends BaseModule {
         switch (template) {
             case "invoice":
                 return new InvoiceTemplate(json, this.printer);
+            case "ticket":
+                return new TickeTemplate(json, this.printer);
         }
 
         throw new NotFoundTemplateException();
