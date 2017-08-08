@@ -2,6 +2,7 @@ package pe.org.incn.support;
 
 import java.util.ArrayList;
 import java.util.List;
+import pe.org.incn.main.Configuration;
 
 /**
  * Helpers
@@ -59,6 +60,23 @@ public class Helpers {
         return text;
     }
 
+    public static void printRules() {
+        String line = "";
+        int max = Configuration.getCanvasMaxWidth() - 2;
+
+        for (int i = 0; i < max / 2; i++) {
+            line += "-";
+        }
+
+        line += "||";
+
+        for (int i = 0; i < max / 2; i++) {
+            line += "-";
+        }
+
+        System.out.println(line);
+    }
+
     /**
      * Split a list into multiple lists.
      *
@@ -75,7 +93,7 @@ public class Helpers {
             result.add(source.subList(start, end));
             start += chunksize;
         }
-        
+
         return result;
     }
 }
