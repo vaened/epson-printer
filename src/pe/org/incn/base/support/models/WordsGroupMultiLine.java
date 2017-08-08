@@ -24,6 +24,6 @@ public class WordsGroupMultiLine extends BaseWordsGroup {
      */
     @Override
     public boolean isValidLength() {
-        return Configuration.getCanvasMaxWidth() >= Math.max(this.getCleanLabelLength(), this.getCleanTextLength());
+        return (Configuration.getCanvasMaxWidth() / 2 )>= Math.max(this.getCleanLabelLength(), this.getCleanTextLength());
     }
 }
