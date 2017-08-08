@@ -1,30 +1,167 @@
 package pe.org.incn.templates.cashbox;
 
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jpos.JposException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
-import pe.org.incn.base.Printable;
+import pe.org.incn.base.WriterContract;
+import pe.org.incn.main.Configuration;
+import pe.org.incn.support.Helpers;
 
 /**
  * PaymentDocument
  *
  * @author enea <enea.so@live.com>
  */
-public class PaymentDocument  extends Printable{
+abstract class PaymentDocument extends Document {
 
     /**
      * PaymentDocument constructor.
      *
+     * @param json
      * @param printer
      */
-    public PaymentDocument(EpsonPrintable printer) {
-        super(printer);
+    public PaymentDocument(JSONObject json, EpsonPrintable printer) {
+        super(json, printer);
     }
+
+    protected abstract void writeOwnerAttributes() throws JposException;
+
+    protected abstract void totalsAttributes() throws JposException;
 
     @Override
     public void canvas() throws JposException {
-        this.getWriter()
-                .centerWords("Instituto Nacional de Ciencias Neurológicas".toUpperCase())
-                .writeLine("Documento de pago");
-        
-    }    
+        WriterContract writer = this.getWriter();
+
+        /// print header
+        this.writeHeader();
+
+        /// Write title document
+        writer.centerBoldWords(this.documentName().concat(" de venta electrónica").toUpperCase());
+
+        writer.wrapper(
+                w -> w.groupCenter("N°".concat(this.documentName().toUpperCase()), json("document")),
+                w -> w.groupCenter("Moneda", json("money"))
+        );
+
+        this.breakLine();
+        this.breakLine();
+
+        /// Invoice data
+        writer.groupWords("Cliente", json("client_name"));
+
+        this.writeOwnerAttributes();
+
+        writer.wrapper(
+                /// Invoice date
+                w -> w.groupMultiLine("Fecha de Emisión", json("issue_date")),
+                w -> w.groupMultiLine("Hora", json("issue_hour")),
+                /// Client data
+                w -> w.groupMultiLine("Historia Clínica", json("history")),
+                w -> w.groupMultiLine("DNI", json("identity_document")),
+                w -> w.groupMultiLine("Prefactura", json("preinvoice")),
+                w -> w.groupMultiLine("Origen", json("origin"))
+        );
+
+        /// Display payment cotegory
+//        writer.groupWords("Categoría de pago", json("category"));
+        JSONArray elements = this.content();
+
+        this.breakLine();
+        this.breakLine();
+        writer.centerBoldWords("DETALLE");
+
+        this.separator();
+        writer.writeBoldLine(Helpers.concat("Cant ", "Descripción"));
+        this.separator();
+
+        for (int i = 0, length = elements.length(); i < length; i++) {
+            JSONObject obj = extractObject(elements, i);
+
+            String description = value(obj, "facdes");
+            if (description.length() > 37) {
+                description = description.substring(0, 37);
+            }
+            writer.writeLine(Helpers.concat(" ", Helpers.rightAutocomplete(value(obj, "facnve"), 4), description.toLowerCase()));
+
+            String price = moneyFormatter(value(obj, "facpri"));
+            String total = moneyFormatter(value(obj, "totpar"));
+
+            String spaces = Helpers.rightAutocomplete("", Configuration.getCanvasMaxWidth() - Helpers.concat(" precio: ", price, " total: ", total).length());
+
+            String line = Helpers.concat(
+                    spaces,
+                    Command.prepare(" precio: ", Command.BOLD),
+                    Command.prepare(price, Command.NORMAL),
+                    Command.prepare(" total: ", Command.BOLD),
+                    Command.prepare(total, Command.NORMAL)
+            );
+
+            writer.write(line, new String[]{});
+            this.breakLine();
+        }
+
+        this.separator();
+
+        String total = json("definitive_total");
+        String subtotal = json("subtotal");
+
+        writer.writeLine(
+                Helpers.concat(
+                        Command.prepare("Subtotal: ", Command.BOLD),
+                        Command.prepare(moneyFormatter(subtotal), Command.NORMAL, Command.RIGHT)
+                ),
+                Command.BLANK_LINE
+        );
+
+        this.totalsAttributes();
+
+        writer.writeLine(
+                Helpers.concat(
+                        Command.prepare("Total: ", Command.BOLD, Command.MEDIUM_SIZE),
+                        Command.prepare(moneyFormatter(total), Command.NORMAL, Command.MEDIUM_SIZE, Command.RIGHT)
+                ),
+                Command.BLANK_LINE
+        );
+
+        writer.centerBoldWords(json("legend").toUpperCase());
+
+        this.separator();
+
+        writer
+                .groupOneLineWords("CAJA", json("cashbox"))
+                .groupOneLineWords("CAJERO", json("cashier"))
+                .groupOneLineWords("SERIE DE EQUIPO", json("equipment_series"));
+
+        this.breakLine();
+    }
+
+    protected JSONObject extractObject(JSONArray elements, int index) {
+        try {
+            return elements.getJSONObject(index);
+        } catch (JSONException ex) {
+            Logger.getLogger(PaymentDocument.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    protected JSONArray content() {
+        try {
+            return this.json.getJSONArray("content");
+        } catch (JSONException ex) {
+            Logger.getLogger(PaymentDocument.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    protected String moneyFormatter(String money) {
+        Double m = Double.parseDouble(money);
+        return String.format(Locale.ROOT, "S/ %.2f", m);
+    }
 }
