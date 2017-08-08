@@ -2,10 +2,10 @@ package pe.org.incn.base;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import jp.co.epson.upos.UPOSConst;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import pe.org.incn.main.Configuration;
+import pe.org.incn.support.Helpers;
 
 /**
  *
@@ -26,14 +26,20 @@ public abstract class Printable {
         this.printer = printer;
         this.setWriter(Configuration.mainWriter(printer));
     }
-    
+
     /**
      * Establishes a writer for printing.
      *
      * @param writer
      */
-    protected final void setWriter(WriterContract writer){
+    protected final void setWriter(WriterContract writer) {
         this.writer = writer;
+    }
+
+    /**
+     * Init method.
+     */
+    protected void init() throws JposException {
     }
 
     /**
@@ -44,35 +50,7 @@ public abstract class Printable {
     public Printable draw() {
         try {
 
-            // JavaPOS's code for Step5
-            //Even if using any printers, 0.01mm unit makes it possible to print neatly.
-            printer.setMapMode(POSPrinterConst.PTR_MM_METRIC);
-            // JavaPOS's code for Step5--END
-
-            //Output by the high quality mode
-            printer.setRecLetterQuality(true);
-            boolean bSetBitmapSuccess = false;
-            for (int iRetryCount = 0; iRetryCount < 5; iRetryCount++) {
-                try {
-                    //Register a bitmap
-                    printer.setBitmap(1, POSPrinterConst.PTR_S_RECEIPT, "C:\\logo.bmp",
-                            (printer.getRecLineWidth() / 3), POSPrinterConst.PTR_BM_CENTER);
-
-                    bSetBitmapSuccess = true;
-                    break;
-                } catch (JposException ex) {
-                    if (ex.getErrorCode() == UPOSConst.UPOS_E_FAILURE && ex.getErrorCodeExtended() == 0 && ex.getMessage().equals("It is not initialized.")) {
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException ex2) {
-                            Logger.getLogger(Printable.class.getName()).log(Level.SEVERE, null, ex2);
-                        }
-                    }
-                }
-            }
-            if (!bSetBitmapSuccess) {
-                System.err.println("error pe");
-            }
+            this.init();
 
             this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_TRANSACTION);
 
@@ -95,6 +73,17 @@ public abstract class Printable {
         return this.writer;
     }
 
+    public Printable separator() throws JposException {
+        String line = "";
+
+        for (int i = 0; i < Configuration.getCanvasMaxWidth(); i++) {
+            line += "-";
+        }
+
+        this.getWriter().write(line, new String[]{Command.BLANK_LINE});
+        return this;
+    }
+
     /**
      * Draw a line break.
      *
@@ -102,7 +91,18 @@ public abstract class Printable {
      * @throws JposException
      */
     public Printable jump() throws JposException {
-        return this.jump(1);
+        return this.jump(2);
+    }
+
+    /**
+     * br html attribute.
+     *
+     * @return
+     * @throws JposException
+     */
+    public Printable breakLine() throws JposException {
+        this.getWriter().write("", new String[]{Command.BLANK_LINE});
+        return this;
     }
 
     /**
@@ -112,9 +112,10 @@ public abstract class Printable {
      * @return Printable
      * @throws JposException
      */
-    public Printable jump(int lines) throws JposException {
+    public Printable jump(Integer lines) throws JposException {
         lines *= 10;
-        this.getWriter().writeLine(lines + Command.BREAK);
+        String command = Helpers.concat(Command.HEX, lines.toString(), Command.BREAK);
+        this.getWriter().write("", new String[]{command});
         return this;
     }
 
