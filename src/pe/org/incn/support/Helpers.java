@@ -1,5 +1,6 @@
 package pe.org.incn.support;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import pe.org.incn.main.Configuration;
@@ -95,5 +96,9 @@ public class Helpers {
         }
 
         return result;
+    }
+
+    public static URL resource(String filename) {
+        return ClassLoader.getSystemResource("pe/org/incn/resources/".concat(filename));
     }
 }
