@@ -17,16 +17,16 @@ import javax.swing.JOptionPane;
  * @author enea <enea.so@live.com>
  */
 public class Navbar {
-
+    
     public void loadMenu() {
         final PopupMenu popup = new PopupMenu();
-        Image image = Toolkit.getDefaultToolkit().getImage("C:\\icon.gif");
+        Image image = Toolkit.getDefaultToolkit().getImage(Helpers.resource("icon.gif"));
         final TrayIcon trayIcon = new TrayIcon(image, "Listo para imprimir");
         final SystemTray tray = SystemTray.getSystemTray();
-
+        
         MenuItem restart = new MenuItem("Reiniciar");
         MenuItem exit = new MenuItem("Cerrar");
-
+        
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,11 +38,11 @@ public class Navbar {
                 }
             }
         });
-
+        
         popup.add(restart);
         popup.add(exit);
         popup.addSeparator();
-
+        
         trayIcon.setPopupMenu(popup);
         try {
             tray.add(trayIcon);
