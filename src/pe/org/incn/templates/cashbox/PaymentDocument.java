@@ -59,13 +59,13 @@ abstract class PaymentDocument extends Document {
 
         writer.wrapper(
                 /// Invoice date
-                w -> w.groupMultiLine("Fecha de Emisión", json("issue_date")),
-                w -> w.groupMultiLine("Hora", json("issue_hour")),
+                w -> w.groupOneLine("Emisión", json("issue_date")),
+                w -> w.groupOneLine("Hora", json("issue_hour")),
                 /// Client data
-                w -> w.groupMultiLine("Historia Clínica", json("history")),
-                w -> w.groupMultiLine("DNI", json("identity_document")),
-                w -> w.groupMultiLine("Prefactura", json("preinvoice")),
-                w -> w.groupMultiLine("Origen", json("origin"))
+                w -> w.groupOneLine("H.C.", json("history")),
+                w -> w.groupOneLine("D.N.I.", json("identity_document")),
+                w -> w.groupOneLine("Prefactura", json("preinvoice")),
+                w -> w.groupOneLine("Categoria", json("category"))
         );
 
         /// Display payment cotegory
@@ -123,8 +123,8 @@ abstract class PaymentDocument extends Document {
 
         writer.writeLine(
                 Helpers.concat(
-                        Command.prepare("Total: ", Command.BOLD, Command.MEDIUM_SIZE),
-                        Command.prepare(moneyFormatter(total), Command.NORMAL, Command.MEDIUM_SIZE, Command.RIGHT)
+                        Command.prepare("Total: ", Command.BOLD),
+                        Command.prepare(moneyFormatter(total), Command.NORMAL, Command.RIGHT)
                 ),
                 Command.BLANK_LINE
         );
@@ -133,11 +133,14 @@ abstract class PaymentDocument extends Document {
 
         this.separator();
 
-        writer
-                .groupOneLineWords("CAJA", json("cashbox"))
-                .groupOneLineWords("CAJERO", json("cashier"))
-                .groupOneLineWords("SERIE DE EQUIPO", json("equipment_series"));
+        writer.wrapper(
+                w -> w.groupOneLine("CAJA", json("documentcashbox")),
+                w -> w.groupOneLine("SECUENCIA", json("sequence")),
+                w -> w.groupOneLine("CAJERO", json("username")),
+                w -> w.groupOneLine("ORIGEN", json("origin"))
+        );
 
+        writer.groupOneLineWords("SERIE DE EQUIPO", json("equipment_series"));
         this.breakLine();
     }
 
