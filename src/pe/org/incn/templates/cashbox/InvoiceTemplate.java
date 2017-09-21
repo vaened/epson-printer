@@ -4,6 +4,7 @@ import jpos.JposException;
 import org.json.JSONObject;
 import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
+import pe.org.incn.base.support.GroupFormatter;
 import pe.org.incn.support.Helpers;
 
 /**
@@ -24,22 +25,13 @@ public class InvoiceTemplate extends PaymentDocument {
 
     @Override
     protected void writeOwnerAttributes() throws JposException {
-        this.getWriter()
-                .wrapper(
-                        x -> x.groupMultiLine("Razón social", json("owner_name").toUpperCase()),
-                        x -> x.groupMultiLine("RUC", json("owner_ruc").toUpperCase())
-                );
+        this.getWriter().groupWords("Razón social", json("owner_name").toUpperCase());
+        this.getWriter().groupWords("R.U.C.", json("owner_ruc").toUpperCase());
     }
 
     @Override
     protected void totalsAttributes() throws JposException {
-        String igv = json("definitive_igv");
-        writer.writeLine(
-                Helpers.concat(
-                        Command.prepare("IGV: ", Command.BOLD),
-                        Command.prepare(moneyFormatter(igv), Command.NORMAL, Command.RIGHT)
-                ),
-                Command.BLANK_LINE
-        );
+        writer.writeLine(GroupFormatter.instance("Subtotal", json("subtotal")).makeSpaceBetween());
+        writer.writeLine(GroupFormatter.instance("IGV", json("definitive_igv")).makeSpaceBetween());
     }
 }
