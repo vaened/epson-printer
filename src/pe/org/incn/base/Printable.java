@@ -56,8 +56,20 @@ public abstract class Printable {
 
             this.canvas();
 
-            this.printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "\u001b|fP");
-            
+            if (Configuration.cuttable()) {
+                this.printer.printNormal(POSPrinterConst.PTR_S_RECEIPT, "\u001b|fP");
+            } else {
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+                writer.writeLine("", new String[]{Command.BLANK_LINE});
+            }
+
             this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_NORMAL);
         } catch (JposException ex) {
             Logger.getLogger(Printable.class.getName()).log(Level.SEVERE, null, ex);
