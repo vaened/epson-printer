@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import pe.org.incn.base.Command;
 import pe.org.incn.base.support.models.BaseWordsGroup;
 import pe.org.incn.main.Configuration;
 import pe.org.incn.support.Helpers;
@@ -47,7 +48,7 @@ public class GroupBuilder {
 
     /**
      * built groups.
-     * 
+     *
      * @param groupList
      * @return
      */
@@ -61,8 +62,8 @@ public class GroupBuilder {
 
             if (groups.size() == 2) {
                 group = groups.get(1);
-                firstLine += this.buildFirstLine(group);
-                lastLine += this.buildLastLine(group);
+                firstLine += Command.makeSpaceIfNotEven()+ this.buildFirstLine(group);
+                lastLine += Command.makeSpaceIfNotEven()+ this.buildLastLine(group);
             }
 
             lines.add(firstLine);
@@ -75,6 +76,7 @@ public class GroupBuilder {
 
         return lines;
     }
+
 
     /**
      * Built the first line in the document.
@@ -89,7 +91,7 @@ public class GroupBuilder {
 
         return group.getBuiltLabel();
     }
-    
+
     /**
      * Built the second line in the document.
      *
