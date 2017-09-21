@@ -3,6 +3,7 @@ package pe.org.incn.base;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import pe.org.incn.main.Configuration;
 import pe.org.incn.support.Helpers;
 
 /**
@@ -90,5 +91,18 @@ public class Command {
         }
 
         return text;
+    }
+
+    /**
+     * Creates a blank space to complete the odd row.
+     *
+     * @return
+     */
+    public static String makeSpaceIfNotEven() {
+        if (Configuration.getCanvasMaxWidth() % 2 == 0) {
+            return "";
+        }
+
+        return Command.prepare(" ", Command.NORMAL);
     }
 }
