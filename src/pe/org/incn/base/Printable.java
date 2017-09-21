@@ -99,6 +99,25 @@ public abstract class Printable {
     }
 
     /**
+     * Replicates the character passed by parameter across the width of the document.
+     * 
+     *
+     * @param character
+     * @return
+     * @throws JposException
+     */
+    public Printable replicate(char character) throws JposException {
+        String line = "";
+
+        for (int i = 0; i < Configuration.getCanvasMaxWidth(); i++) {
+            line += character;
+        }
+
+        this.getWriter().write(line, new String[]{});
+        return this;
+    }
+
+    /**
      * Draw a line break.
      *
      * @return Printable
