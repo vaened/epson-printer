@@ -46,7 +46,7 @@ public class Configuration {
 
     /**
      * Set the max width of canvas.
-     * 
+     *
      * @param max_width
      */
     public static void setCanvasMaxWith(int max_width) {
@@ -60,5 +60,12 @@ public class Configuration {
      */
     public static Integer getCanvasMaxWidth() {
         return MAX_WIDTH;
+    }
+
+    /**
+     * @return true if the paper will be cut automatically.
+     */
+    public static Boolean cuttable() {
+        return false;
     }
 }
