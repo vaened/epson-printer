@@ -61,6 +61,22 @@ public class Helpers {
         return text;
     }
 
+    /**
+     * Left autocomplete.
+     *
+     * @param text
+     * @param quantity
+     * @return
+     */
+    public static String leftAutocomplete(String text, Integer quantity) {
+        if (quantity > 0) {
+            String spaces = rightAutocomplete("", quantity - text.length());
+            return spaces + text;
+        }
+
+        return text;
+    }
+
     public static void printRules() {
         String line = "";
         int max = Configuration.getCanvasMaxWidth() - 2;
@@ -93,6 +109,26 @@ public class Helpers {
             int end = Math.min(source.size(), start + chunksize);
             result.add(source.subList(start, end));
             start += chunksize;
+        }
+
+        return result;
+    }
+
+    public static String[] concat(String[]... arrays) {
+        int length = 0;
+
+        for (String[] array : arrays) {
+            length += array.length;
+        }
+
+        String[] result = new String[length];
+
+        int pos = 0;
+        for (String[] array : arrays) {
+            for (String element : array) {
+                result[pos] = element;
+                pos++;
+            }
         }
 
         return result;
