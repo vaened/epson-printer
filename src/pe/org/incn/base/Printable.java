@@ -99,8 +99,9 @@ public abstract class Printable {
     }
 
     /**
-     * Replicates the character passed by parameter across the width of the document.
-     * 
+     * Replicates the character passed by parameter across the width of the
+     * document.
+     *
      *
      * @param character
      * @return

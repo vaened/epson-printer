@@ -120,12 +120,10 @@ public class SimpleWriter implements WriterContract {
                 continue;
             }
 
-            System.err.println(group.getPlainLabel() + "-" + group.getPlainText());
             this.groupWords(group.getPlainLabel(), group.getPlainText());
         }
 
         GroupBuilder groupLine = new GroupBuilder(groups.stream().filter(x -> x.isValidLength()));
-
         return this.write(groupLine.make(), new String[]{});
     }
 

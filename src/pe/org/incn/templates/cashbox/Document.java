@@ -43,13 +43,12 @@ public abstract class Document extends JSONPrintable {
      */
     protected void writeHeader() throws JposException {
         WriterContract writer = this.getWriter();
-
         writer.write("", new String[]{
             "\u001b|1B"
         });
-        
+
         this.breakLine();
-        
+
         writer.centerBoldWords(config("name").toUpperCase());
         writer.centerBoldWords(config("address").toUpperCase());
         writer.centerBoldWords(Helpers.concat("RUC ", config("ruc")));
@@ -68,12 +67,12 @@ public abstract class Document extends JSONPrintable {
 
         //Output by the high quality mode
         printer.setRecLetterQuality(true);
-        
+
         boolean bSetBitmapSuccess = false;
         for (int iRetryCount = 0; iRetryCount < 5; iRetryCount++) {
             try {
                 //Register a bitmap
-                printer.setBitmap(1, POSPrinterConst.PTR_S_RECEIPT, "C:\\logo.bmp",(printer.getRecLineWidth() / 4), POSPrinterConst.PTR_BM_CENTER);
+                printer.setBitmap(1, POSPrinterConst.PTR_S_RECEIPT, "C:\\logo.bmp", (printer.getRecLineWidth() / 4), POSPrinterConst.PTR_BM_CENTER);
 
                 bSetBitmapSuccess = true;
                 break;
