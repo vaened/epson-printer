@@ -104,17 +104,18 @@ public abstract class Printable {
      *
      *
      * @param character
+     * @param comands
      * @return
      * @throws JposException
      */
-    public Printable replicate(char character) throws JposException {
+    public Printable replicate(char character, String ...comands) throws JposException {
         String line = "";
 
         for (int i = 0; i < Configuration.getCanvasMaxWidth(); i++) {
             line += character;
         }
 
-        this.getWriter().write(line, new String[]{});
+        this.getWriter().write(line, comands);
         return this;
     }
 
