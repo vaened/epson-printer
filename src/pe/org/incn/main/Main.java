@@ -40,6 +40,8 @@ public class Main {
             //Enable the device.
             printer.setDeviceEnabled(true);
 
+            printer.setRecLineChars(40);
+
             Configuration.setCanvasMaxWith(printer.getRecLineChars());
 
         } catch (JposException ex) {
