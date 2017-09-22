@@ -6,6 +6,7 @@ import jpos.JposException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.WriterContract;
 import pe.org.incn.base.support.GroupFormatter;
@@ -59,29 +60,33 @@ abstract class PaymentDocument extends Document {
 
         writer.wrapper(
                 /// Invoice date
-                w -> w.groupMultiLine("Emisión", json("issue_date")),
-                w -> w.groupMultiLine("Hora", json("issue_hour")),
+                w -> w.groupOneLine("Emisión", json("issue_date")),
+                w -> w.groupOneLine("Hora", json("issue_hour")),
                 /// Client data
-                w -> w.groupMultiLine("H.C.", json("history")),
-                w -> w.groupMultiLine("D.N.I.", json("identity_document")),
-                w -> w.groupMultiLine("Prefactura", json("preinvoice")),
-                w -> w.groupMultiLine("Categoria", json("category"))
+                w -> w.groupOneLine("H.C.", json("history")),
+                w -> w.groupOneLine("D.N.I.", json("identity_document")),
+                w -> w.groupOneLine("Prefactura", json("preinvoice")),
+                w -> w.groupOneLine("Categoria", json("category"))
         );
 
         /// Print detail
         this.printDetail();
 
+        this.breakLine();
+
         this.totalsAttributes();
         writer.writeLine(GroupFormatter.instance("Total", json("definitive_total")).makeSpaceBetween());
+
+        this.breakLine();
 
         writer.centerBoldWords(json("legend").toUpperCase());
 
         this.separator();
 
         writer.wrapper(
-                w -> w.groupOneLine("CAJA", json("documentcashbox")),
+                w -> w.groupOneLine("CAJA", json("cashbox")),
                 w -> w.groupOneLine("SECUENCIA", json("sequence")),
-                w -> w.groupOneLine("CAJERO", json("username")),
+                w -> w.groupOneLine("CAJERO", json("cashier")),
                 w -> w.groupOneLine("ORIGEN", json("origin"))
         );
 
@@ -89,6 +94,7 @@ abstract class PaymentDocument extends Document {
         this.breakLine();
     }
 
+    /// Draws the detail of the document
     protected void printDetail() throws JposException {
         JSONArray elements = this.content();
 
@@ -113,13 +119,14 @@ abstract class PaymentDocument extends Document {
         }
     }
 
+    /// Extracts the detail totals and displays them.
     protected void writeTotals(JSONObject element) throws JposException {
 
         String price = value(element, "base_price");
         String total = value(element, "total");
 
-        GroupFormatter priceFormatter = GroupFormatter.instance("U.", price);
-        GroupFormatter totalFormatter = GroupFormatter.instance("T.", total);
+        GroupFormatter priceFormatter = GroupFormatter.instance("p.u.", price);
+        GroupFormatter totalFormatter = GroupFormatter.instance("tot.", total);
 
         int totalSize = priceFormatter.getTotalSize() + totalFormatter.getTotalSize() + 1;
 
@@ -134,7 +141,7 @@ abstract class PaymentDocument extends Document {
 
         writer.write(Helpers.leftAutocomplete(totals, Configuration.getCanvasMaxWidth()), new String[]{});
 
-        this.replicate('.');
+        this.replicate('.', Command.BOLD);
     }
 
     protected String buildDescription(JSONObject element) {
