@@ -1,5 +1,8 @@
 package pe.org.incn.support;
 
+import java.awt.TrayIcon.MessageType;
+import java.util.Arrays;
+
 /**
  * Response
  *
@@ -8,7 +11,7 @@ package pe.org.incn.support;
 public class Response {
 
     private String code;
-    private String state;
+    private String status;
     private String response;
 
     public Response() {
@@ -16,10 +19,17 @@ public class Response {
 
     public Response(String response, String status, String code) {
         this.response = response;
-        this.state = status;
+        this.status = status;
         this.code = code;
+        Navbar.showNotification("Mensaje !!", response, this.getMessageStatus());
     }
 
+    public Response(String response, String status, String code, Boolean noMessage) {
+        this.response = response;
+        this.status = status;
+        this.code = code;
+    }
+    
     /**
      * @return the code
      */
@@ -37,15 +47,15 @@ public class Response {
     /**
      * @return the state
      */
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
     /**
-     * @param state the state to set
+     * @param status the status to set
      */
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
@@ -62,4 +72,19 @@ public class Response {
         this.response = response;
     }
 
+    public MessageType getMessageStatus() {
+        if (this.isError()) {
+            return MessageType.ERROR;
+        }
+
+        return MessageType.INFO;
+    }
+
+    public Boolean isError() {
+        return Arrays.asList("404", "403", "500").contains(this.code);
+    }
+
+    public Boolean isSuccess() {
+        return Arrays.asList("200").contains(this.code);
+    }
 }
