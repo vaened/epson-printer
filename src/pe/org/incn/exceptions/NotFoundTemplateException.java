@@ -5,7 +5,7 @@ package pe.org.incn.exceptions;
  *
  * @author enea <enea.so@live.com>
  */
-public class NotFoundTemplateException extends RuntimeException {
+public class NotFoundTemplateException extends BasePrinterException {
 
     public NotFoundTemplateException() {
         super("The template was not found");

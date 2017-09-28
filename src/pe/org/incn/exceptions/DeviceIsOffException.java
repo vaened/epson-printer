@@ -5,7 +5,7 @@ package pe.org.incn.exceptions;
  *
  * @author enea <enea.so@live.com>
  */
-public class DeviceIsOffException extends RuntimeException {
+public class DeviceIsOffException extends BasePrinterException {
 
     public DeviceIsOffException() {
         super("La fuente de alimentación del dispositivo está apagada");

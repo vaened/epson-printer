@@ -5,7 +5,7 @@ package pe.org.incn.exceptions;
  *
  * @author enea <enea.so@live.com>
  */
-public class DeviceWasDisconnected extends RuntimeException {
+public class DeviceWasDisconnected extends BasePrinterException {
 
     public DeviceWasDisconnected() {
         super("El dispositivo fue desconectado");

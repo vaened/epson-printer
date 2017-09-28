@@ -5,9 +5,10 @@ package pe.org.incn.exceptions;
  *
  * @author enea <enea.so@live.com>
  */
-public class NotFoundObject extends RuntimeException {
+public class NotFoundObject extends BasePrinterException {
 
     public NotFoundObject() {
+        super("The main key was not found");
     }
 
     public NotFoundObject(String message) {
