@@ -52,6 +52,7 @@ public class Main {
             Navbar.showInfoNotification("Mensaje", "Listo para imprimir");
 
         } catch (JposException ex) {
+            Navbar.showErrorNotification("Error!!", ex.getMessage());
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
