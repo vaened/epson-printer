@@ -90,7 +90,7 @@ abstract class PaymentDocument extends Document {
                 w -> w.groupOneLine("ORIGEN", json("origin"))
         );
 
-        writer.groupOneLineWords("SERIE DE EQUIPO", json("equipment_series"));
+        writer.groupOneLineWords("SERIE", json("equipment_series"));
         this.breakLine();
     }
 
