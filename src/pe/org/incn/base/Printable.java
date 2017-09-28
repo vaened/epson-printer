@@ -2,10 +2,18 @@ package pe.org.incn.base;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jpos.JposConst;
 import jpos.JposException;
 import jpos.POSPrinterConst;
+import pe.org.incn.exceptions.CanNotBeAccessed;
+import pe.org.incn.exceptions.DeviceIsOffException;
+import pe.org.incn.exceptions.DeviceWasDisconnected;
+import pe.org.incn.exceptions.GlobalException;
+import pe.org.incn.exceptions.OutOfReceiptException;
 import pe.org.incn.main.Configuration;
+import pe.org.incn.main.Main;
 import pe.org.incn.support.Helpers;
+import pe.org.incn.support.Navbar;
 
 /**
  *
@@ -40,6 +48,7 @@ public abstract class Printable {
      * Init method.
      */
     protected void init() throws JposException {
+        Navbar.showInfoNotification("Mensaje", "Imprimiendo....");
     }
 
     /**
@@ -48,11 +57,19 @@ public abstract class Printable {
      * @return Printable
      */
     public Printable draw() {
+
         try {
+            this.printer.setAsyncMode(false);
+
+            this.printer.clearOutput();
+
+            this.getWriter().writeBoldLine("-");
+
+            this.printer.setAsyncMode(true);
 
             this.init();
 
-            this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_TRANSACTION);
+            this.printer.beginTransactionPrint();
 
             this.canvas();
 
@@ -70,12 +87,37 @@ public abstract class Printable {
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
             }
 
-            this.printer.transactionPrint(POSPrinterConst.PTR_S_RECEIPT, POSPrinterConst.PTR_TP_NORMAL);
-        } catch (JposException ex) {
-            Logger.getLogger(Printable.class.getName()).log(Level.SEVERE, null, ex);
+            this.printer.endTransactionPrint();
+
+            Navbar.showInfoNotification("Listo", "Documento impreso");
+        } catch (JposException exception) {
+            System.err.println("------- START ERRORS ------- ");
+            System.err.println(exception.getMessage());
+            System.err.println("------- END ERRORS ------- ");
+            Printable.verifyErrorException(exception);
         }
 
         return this;
+    }
+
+    /**
+     * Verify if it is a custom exception.
+     *
+     * @param exception
+     */
+    public static void verifyErrorException(JposException exception) {
+        switch (exception.getMessage()) {
+            case "The power supply of the device is off.":
+                throw new DeviceIsOffException();
+            case "The device is offline.":
+                throw new DeviceWasDisconnected();
+            case "The exclusive access right had not been acquired.":
+                throw new CanNotBeAccessed();
+            case "Out of receipt form.":
+                throw new OutOfReceiptException();
+            default:
+                throw new GlobalException(exception.getMessage());
+        }
     }
 
     /**
@@ -108,7 +150,7 @@ public abstract class Printable {
      * @return
      * @throws JposException
      */
-    public Printable replicate(char character, String ...comands) throws JposException {
+    public Printable replicate(char character, String... comands) throws JposException {
         String line = "";
 
         for (int i = 0; i < Configuration.getCanvasMaxWidth(); i++) {
