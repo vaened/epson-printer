@@ -106,7 +106,7 @@ abstract class PaymentDocument extends Document {
     protected void printAditionalAttributes() throws JposException {
         JSONArray elements = this.additional();
 
-        if (elements == null) {
+        if (elements == null || elements.length() == 0) {
             this.breakLine();
             return;
         }
