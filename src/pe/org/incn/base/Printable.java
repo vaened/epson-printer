@@ -83,8 +83,6 @@ public abstract class Printable {
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
-                writer.writeLine("", new String[]{Command.BLANK_LINE});
-                writer.writeLine("", new String[]{Command.BLANK_LINE});
             }
 
             this.printer.endTransactionPrint();
