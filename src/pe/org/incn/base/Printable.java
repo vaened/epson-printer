@@ -46,9 +46,10 @@ public abstract class Printable {
 
     /**
      * Init method.
+     * @throws jpos.JposException
      */
     protected void init() throws JposException {
-        Navbar.showInfoNotification("Mensaje", "Imprimiendo....");
+        System.err.println("Imprimiendo....");
     }
 
     /**
