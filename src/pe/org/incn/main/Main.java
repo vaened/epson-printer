@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jpos.JposException;
+import jpos.POSPrinterConst;
 import jpos.util.JposPropertiesConst;
 import org.json.JSONException;
 import pe.org.incn.base.EpsonPrintable;
-import pe.org.incn.base.Printer;
-import pe.org.incn.support.Helpers;
+import pe.org.incn.support.Dispatcher;
 import pe.org.incn.support.Navbar;
+import pe.org.incn.base.Printer;
 
 /**
  *
@@ -25,6 +26,10 @@ public class Main {
 
     public static void main(String[] args) {
         EpsonPrintable printer = new Printer();
+
+        if (SystemTray.isSupported()) {
+            new Navbar().loadMenu();
+        }
         try {
 
             System.setProperty(JposPropertiesConst.JPOS_POPULATOR_FILE_PROP_NAME, "C:\\jpos.xml");
@@ -40,23 +45,23 @@ public class Main {
             //Enable the device.
             printer.setDeviceEnabled(true);
 
+            printer.setRecLetterQuality(true);
             printer.setRecLineChars(40);
 
             Configuration.setCanvasMaxWith(printer.getRecLineChars());
+            Navbar.showInfoNotification("Mensaje", "Listo para imprimir");
 
         } catch (JposException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        if (SystemTray.isSupported()) {
-            new Navbar().loadMenu();
-        }
+        Dispatcher dispatcher = new Dispatcher(printer);
 
-        PrinterServer connection = new PrinterServer(printer);
+        PrinterServer connection = new PrinterServer(dispatcher);
 
         try {
             connection.open();
-        } catch (IOException | JSONException ex) {
+        } catch (IOException | JSONException | JposException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
