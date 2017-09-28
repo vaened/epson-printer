@@ -1,5 +1,7 @@
 package pe.org.incn.templates.cashbox;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jpos.JposException;
@@ -10,6 +12,8 @@ import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.WriterContract;
 import pe.org.incn.base.support.GroupFormatter;
+import pe.org.incn.base.support.Groupable;
+import pe.org.incn.base.support.models.WordsGroupOneLine;
 import pe.org.incn.main.Configuration;
 import pe.org.incn.support.Helpers;
 
@@ -69,6 +73,8 @@ abstract class PaymentDocument extends Document {
                 w -> w.groupOneLine("Categoria", json("category"))
         );
 
+        this.printAditionalAttributes();
+
         /// Print detail
         this.printDetail();
 
@@ -94,11 +100,27 @@ abstract class PaymentDocument extends Document {
         this.breakLine();
     }
 
+    /**
+     * Extract and print the additional attributes.
+     */
+    protected void printAditionalAttributes() throws JposException {
+        JSONArray elements = this.additional();
+
+        if (elements == null) {
+            this.breakLine();
+            return;
+        }
+
+        for (int i = 0, length = elements.length(); i < length; i++) {
+            JSONObject element = extractObject(elements, i);
+            this.getWriter().groupOneLineWords(value(element, "label"), value(element, "text"));
+        }
+    }
+
     /// Draws the detail of the document
     protected void printDetail() throws JposException {
         JSONArray elements = this.content();
 
-        this.breakLine();
         this.breakLine();
         writer.centerBoldWords("DETALLE");
 
@@ -177,5 +199,13 @@ abstract class PaymentDocument extends Document {
         }
 
         return null;
+    }
+
+    protected JSONArray additional() {
+        try {
+            return this.json.getJSONArray("additional");
+        } catch (JSONException ex) {
+            return null;
+        }
     }
 }
