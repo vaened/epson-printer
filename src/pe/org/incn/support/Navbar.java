@@ -17,16 +17,18 @@ import javax.swing.JOptionPane;
  * @author enea <enea.so@live.com>
  */
 public class Navbar {
-    
+
+    static protected TrayIcon trayIcon;
+
     public void loadMenu() {
         final PopupMenu popup = new PopupMenu();
         Image image = Toolkit.getDefaultToolkit().getImage(Helpers.resource("icon.gif"));
-        final TrayIcon trayIcon = new TrayIcon(image, "Listo para imprimir");
+        Navbar.trayIcon = new TrayIcon(image, "Listo para imprimir");
         final SystemTray tray = SystemTray.getSystemTray();
-        
+
         MenuItem restart = new MenuItem("Reiniciar");
         MenuItem exit = new MenuItem("Cerrar");
-        
+
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,16 +40,28 @@ public class Navbar {
                 }
             }
         });
-        
+
         popup.add(restart);
         popup.add(exit);
         popup.addSeparator();
-        
+
         trayIcon.setPopupMenu(popup);
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
             System.out.println("TrayIcon could not be added.");
         }
+    }
+
+    public static void showNotification(String title, String message, TrayIcon.MessageType status) {
+        trayIcon.displayMessage(title, message, status);
+    }
+
+    public static void showInfoNotification(String title, String message) {
+        trayIcon.displayMessage(title, message, TrayIcon.MessageType.INFO);
+    }
+
+    public static void showErrorNotification(String title, String message) {
+        trayIcon.displayMessage(title, message, TrayIcon.MessageType.ERROR);
     }
 }
