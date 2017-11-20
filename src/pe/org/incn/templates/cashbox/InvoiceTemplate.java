@@ -1,11 +1,9 @@
 package pe.org.incn.templates.cashbox;
 
 import jpos.JposException;
-import org.json.JSONObject;
-import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.support.GroupFormatter;
-import pe.org.incn.support.Helpers;
+import pe.org.incn.json.JSONObject;
 
 /**
  * InvoiceTemplate

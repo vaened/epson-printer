@@ -5,11 +5,11 @@ import java.util.logging.Logger;
 import jp.co.epson.upos.UPOSConst;
 import jpos.JposException;
 import jpos.POSPrinterConst;
-import org.json.JSONObject;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.JSONPrintable;
 import pe.org.incn.base.Printable;
 import pe.org.incn.base.WriterContract;
+import pe.org.incn.json.JSONObject;
 import pe.org.incn.support.Helpers;
 
 /**

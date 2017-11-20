@@ -36,6 +36,10 @@ abstract public class BaseModule {
         }
     }
 
+    protected pe.org.incn.json.JSONObject makeJSON(JSONObject json) {
+        return new pe.org.incn.json.JSONObject(json);
+    }
+
     /**
      * It returns the template to print and in case of not finding it, throws an
      * exception.

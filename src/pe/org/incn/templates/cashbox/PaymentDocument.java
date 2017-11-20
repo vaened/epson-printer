@@ -1,19 +1,12 @@
 package pe.org.incn.templates.cashbox;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jpos.JposException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import pe.org.incn.base.Command;
 import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.WriterContract;
 import pe.org.incn.base.support.GroupFormatter;
-import pe.org.incn.base.support.Groupable;
-import pe.org.incn.base.support.models.WordsGroupOneLine;
+import pe.org.incn.json.JSONArray;
+import pe.org.incn.json.JSONObject;
 import pe.org.incn.main.Configuration;
 import pe.org.incn.support.Helpers;
 
@@ -106,14 +99,14 @@ abstract class PaymentDocument extends Document {
     protected void printAditionalAttributes() throws JposException {
         JSONArray elements = this.additional();
 
-        if (elements == null || elements.length() == 0) {
+        if (elements == null || elements.isEmpty()) {
             this.breakLine();
             return;
         }
 
-        for (int i = 0, length = elements.length(); i < length; i++) {
+        for (int i = 0, length = elements.size(); i < length; i++) {
             JSONObject element = extractObject(elements, i);
-            this.getWriter().groupOneLineWords(value(element, "label"), value(element, "text"));
+            this.getWriter().groupOneLineWords(element.json("label"), element.json("text"));
         }
     }
 
@@ -128,7 +121,7 @@ abstract class PaymentDocument extends Document {
         writer.writeBoldLine(Helpers.concat("Can. ", "Descripción"));
         this.separator();
 
-        for (int i = 0, length = elements.length(); i < length; i++) {
+        for (int i = 0, length = elements.size(); i < length; i++) {
             JSONObject element = extractObject(elements, i);
 
             String line = Helpers.concat(this.buildQuantity(element), this.buildDescription(element));
@@ -144,8 +137,8 @@ abstract class PaymentDocument extends Document {
     /// Extracts the detail totals and displays them.
     protected void writeTotals(JSONObject element) throws JposException {
 
-        String price = value(element, "base_price");
-        String total = value(element, "total");
+        String price = element.json("base_price");
+        String total = element.json("total");
 
         GroupFormatter priceFormatter = GroupFormatter.instance("p.u.", price);
         GroupFormatter totalFormatter = GroupFormatter.instance("tot.", total);
@@ -167,7 +160,7 @@ abstract class PaymentDocument extends Document {
     }
 
     protected String buildDescription(JSONObject element) {
-        String description = value(element, "description");
+        String description = element.json("description");
         int limit = Configuration.getCanvasMaxWidth() - QUANTITY_SPACES;
 
         if (description.length() > limit) {
@@ -178,34 +171,19 @@ abstract class PaymentDocument extends Document {
     }
 
     protected String buildQuantity(JSONObject element) {
-        String quantity = value(element, "quantity");
+        String quantity = element.json("quantity");
         return Helpers.rightAutocomplete(quantity, QUANTITY_SPACES);
     }
 
     protected JSONObject extractObject(JSONArray elements, int index) {
-        try {
-            return elements.getJSONObject(index);
-        } catch (JSONException ex) {
-            Logger.getLogger(PaymentDocument.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return elements.getJSONObject(index);
     }
 
     protected JSONArray content() {
-        try {
-            return this.json.getJSONArray("content");
-        } catch (JSONException ex) {
-            Logger.getLogger(PaymentDocument.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return null;
+        return this.object.getJSONArray("content");
     }
 
     protected JSONArray additional() {
-        try {
-            return this.json.getJSONArray("additional");
-        } catch (JSONException ex) {
-            return null;
-        }
+        return this.object.getJSONArray("additional");
     }
 }

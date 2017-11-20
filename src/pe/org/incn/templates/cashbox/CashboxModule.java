@@ -21,9 +21,9 @@ public class CashboxModule extends BaseModule {
     public Printable buildTemplate(String template, JSONObject json) throws NotFoundTemplateException {
         switch (template) {
             case "invoice":
-                return new InvoiceTemplate(json, this.printer);
+                return new InvoiceTemplate(this.makeJSON(json), this.printer);
             case "ticket":
-                return new TickeTemplate(json, this.printer);
+                return new TickeTemplate(this.makeJSON(json), this.printer);
         }
 
         throw new NotFoundTemplateException();

@@ -1,8 +1,8 @@
 package pe.org.incn.templates.cashbox;
 
 import jpos.JposException;
-import org.json.JSONObject;
 import pe.org.incn.base.EpsonPrintable;
+import pe.org.incn.json.JSONObject;
 
 /**
  * TickeTemplate
