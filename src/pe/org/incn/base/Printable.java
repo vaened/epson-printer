@@ -1,8 +1,5 @@
 package pe.org.incn.base;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jpos.JposConst;
 import jpos.JposException;
 import jpos.POSPrinterConst;
 import pe.org.incn.exceptions.CanNotBeAccessed;
@@ -11,7 +8,6 @@ import pe.org.incn.exceptions.DeviceWasDisconnected;
 import pe.org.incn.exceptions.GlobalException;
 import pe.org.incn.exceptions.OutOfReceiptException;
 import pe.org.incn.main.Configuration;
-import pe.org.incn.main.Main;
 import pe.org.incn.support.Helpers;
 import pe.org.incn.support.Navbar;
 
@@ -46,6 +42,7 @@ public abstract class Printable {
 
     /**
      * Init method.
+     *
      * @throws jpos.JposException
      */
     protected void init() throws JposException {
@@ -167,7 +164,7 @@ public abstract class Printable {
      * @throws JposException
      */
     public Printable jump() throws JposException {
-        return this.jump(2);
+        return this.jump(1);
     }
 
     /**
@@ -189,7 +186,9 @@ public abstract class Printable {
      * @throws JposException
      */
     public Printable jump(Integer lines) throws JposException {
-        lines *= 10;
+        lines *= 20;
+
+        System.out.println(lines);
         String command = Helpers.concat(Command.HEX, lines.toString(), Command.BREAK);
         this.getWriter().write("", new String[]{command});
         return this;
