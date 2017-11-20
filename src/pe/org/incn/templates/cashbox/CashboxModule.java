@@ -24,6 +24,8 @@ public class CashboxModule extends BaseModule {
                 return new InvoiceTemplate(this.makeJSON(json), this.printer);
             case "ticket":
                 return new TickeTemplate(this.makeJSON(json), this.printer);
+            case "especial.consolidated":
+                return new EspecialConsolidatedTemplate(this.makeJSON(json), this.printer);
         }
 
         throw new NotFoundTemplateException();
