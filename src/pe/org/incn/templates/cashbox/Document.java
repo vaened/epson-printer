@@ -57,6 +57,22 @@ public abstract class Document extends JSONPrintable {
         this.separator();
     }
 
+    /**
+     *
+     * @throws JposException
+     */
+    protected void writeFooter() throws JposException {
+        writer.wrapper(
+                w -> w.groupOneLine("CAJA", json("cashbox")),
+                w -> w.groupOneLine("SECUENCIA", json("sequence")),
+                w -> w.groupOneLine("CAJERO", json("cashier")),
+                w -> w.groupOneLine("ORIGEN", json("origin"))
+        );
+
+        writer.groupOneLineWords("SERIE", json("equipment_series"));
+        this.breakLine();
+    }
+
     @Override
     protected void init() throws JposException {
 
