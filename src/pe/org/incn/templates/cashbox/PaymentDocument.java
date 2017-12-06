@@ -81,16 +81,8 @@ abstract class PaymentDocument extends Document {
         writer.centerBoldWords(json("legend").toUpperCase());
 
         this.separator();
-
-        writer.wrapper(
-                w -> w.groupOneLine("CAJA", json("cashbox")),
-                w -> w.groupOneLine("SECUENCIA", json("sequence")),
-                w -> w.groupOneLine("CAJERO", json("cashier")),
-                w -> w.groupOneLine("ORIGEN", json("origin"))
-        );
-
-        writer.groupOneLineWords("SERIE", json("equipment_series"));
-        this.breakLine();
+        
+        this.writeFooter();
     }
 
     /**
