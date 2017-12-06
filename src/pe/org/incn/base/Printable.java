@@ -84,6 +84,7 @@ public abstract class Printable {
             }
 
             this.printer.endTransactionPrint();
+            this.printer.clearOutput();
 
             Navbar.showInfoNotification("Listo", "Documento impreso");
         } catch (JposException exception) {
