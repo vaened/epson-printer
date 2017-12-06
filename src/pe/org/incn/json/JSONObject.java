@@ -94,7 +94,7 @@ public class JSONObject {
             Logger.getLogger(JSONObject.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return null;
+        return "-";
     }
 
     /**
