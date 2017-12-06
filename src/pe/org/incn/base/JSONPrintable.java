@@ -16,7 +16,15 @@ public abstract class JSONPrintable extends Printable {
         super(printable);
         this.object = object;
     }
-    
+
+    public Boolean has(String key) {
+        return this.has(this.object, key) ? json(key) != null : false;
+    }
+
+    public Boolean has(JSONObject object, String key) {
+        return object.has(key) ? json(key) != null : false;
+    }
+
     public String json(String key) {
         return this.object.json(key);
     }
