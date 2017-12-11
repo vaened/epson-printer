@@ -7,7 +7,7 @@ import pe.org.incn.json.JSONObject;
  *
  * @author enea <enea.so@live.com>
  */
-public class EspecialTableItem {
+public class EspecialTableItem implements TableRowContract {
 
     private final JSONObject consolidated;
 

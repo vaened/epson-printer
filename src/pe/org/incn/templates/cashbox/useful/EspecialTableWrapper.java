@@ -18,7 +18,7 @@ public class EspecialTableWrapper {
 
     public EspecialTableWrapper(JSONPrintable printable) {
         this.printable = printable;
-        this.formatter = new ColumnsFormatter("CONCEPTO");
+        this.formatter = new ColumnsFormatter("Descripción");
         this.loadColumns();
     }
 
@@ -58,5 +58,4 @@ public class EspecialTableWrapper {
             return this.length;
         }
     }
-
 }
