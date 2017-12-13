@@ -29,7 +29,6 @@ public class InvoiceTemplate extends PaymentDocument {
 
     @Override
     protected void totalsAttributes() throws JposException {
-        writer.writeLine(GroupFormatter.instance("Subtotal", json("subtotal")).makeSpaceBetween());
         writer.writeLine(GroupFormatter.instance("IGV", json("definitive_igv")).makeSpaceBetween());
     }
 }
