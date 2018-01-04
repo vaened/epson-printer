@@ -49,6 +49,9 @@ abstract class PaymentDocument extends Document {
         );
 
         this.breakLine();
+        if (is("annulled")) {
+            writer.centerBoldWords("[DOCUMENTO ANULADO]");
+        }
 
         /// Invoice data
         this.writeOwnerAttributes();
@@ -83,9 +86,9 @@ abstract class PaymentDocument extends Document {
         writer.centerBoldWords(json("legend").toUpperCase());
 
         this.separator();
-        
+
         this.writeFooter();
-        
+
         this.writeMessagesIfExists();
     }
 
