@@ -60,9 +60,9 @@ public class PrinterServer {
 
             System.out.println("connect");
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
 
             String json;
 
