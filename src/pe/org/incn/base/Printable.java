@@ -57,13 +57,17 @@ public abstract class Printable {
     public Printable draw() {
 
         try {
+            this.printer.clearOutput();
             this.printer.setAsyncMode(false);
+            this.printer.clearOutput();
 
             this.getWriter().writeBoldLine("-");
 
             this.printer.setAsyncMode(true);
 
             this.init();
+
+            this.printer.beginTransactionPrint();
 
             this.canvas();
 
@@ -78,13 +82,21 @@ public abstract class Printable {
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
                 writer.writeLine("", new String[]{Command.BLANK_LINE});
             }
-            
+
+            this.printer.endTransactionPrint();
+
             Navbar.showInfoNotification("Listo", "Documento enviado");
         } catch (JposException exception) {
             System.err.println("------- START ERRORS -------");
             System.err.println(exception.getMessage());
             System.err.println(" ------- END ERRORS -------");
             Printable.verifyErrorException(exception);
+        } finally {
+            try {
+                this.printer.clearOutput();
+            } catch (JposException e) {
+                Printable.verifyErrorException(e);
+            }
         }
 
         return this;
