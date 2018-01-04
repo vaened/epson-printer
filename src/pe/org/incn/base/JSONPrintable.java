@@ -29,6 +29,10 @@ public abstract class JSONPrintable extends Printable {
         return this.object.json(key);
     }
 
+    public Boolean is(String key) {
+        return this.object.is(key);
+    }
+
     public String json(String key, String defaultValue) {
         return this.object.json(key, defaultValue);
     }

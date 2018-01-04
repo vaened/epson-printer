@@ -98,6 +98,22 @@ public class JSONObject {
     }
 
     /**
+     * Extract boolean value
+     *
+     * @param key
+     * @return
+     */
+    public Boolean is(String key) {
+        try {
+            return this.object.getBoolean(key);
+        } catch (JSONException ex) {
+            Logger.getLogger(JSONObject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    /**
      * Verify if object exists on json
      *
      * @param key
