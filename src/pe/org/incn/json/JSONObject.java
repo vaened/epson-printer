@@ -127,6 +127,10 @@ public class JSONObject {
      */
     public JSONArray getJSONArray(String key) {
         try {
+            if (!this.object.has(key)) {
+                return new JSONArray();
+            }
+
             return new JSONArray(this.object.getJSONArray(key));
         } catch (JSONException ex) {
             Logger.getLogger(JSONObject.class.getName()).log(Level.SEVERE, null, ex);

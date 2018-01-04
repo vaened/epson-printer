@@ -18,6 +18,10 @@ public class JSONArray extends AbstractList<JSONObject> {
         this.array = array;
     }
 
+    public JSONArray() {
+        this.array = new org.json.JSONArray();
+    }
+
     public JSONObject getJSONObject(int index) {
         try {
             return new JSONObject(this.array.getJSONObject(index));
