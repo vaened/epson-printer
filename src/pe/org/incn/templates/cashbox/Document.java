@@ -9,6 +9,7 @@ import pe.org.incn.base.EpsonPrintable;
 import pe.org.incn.base.JSONPrintable;
 import pe.org.incn.base.Printable;
 import pe.org.incn.base.WriterContract;
+import pe.org.incn.json.JSONArray;
 import pe.org.incn.json.JSONObject;
 import pe.org.incn.support.Helpers;
 
@@ -70,6 +71,19 @@ public abstract class Document extends JSONPrintable {
         );
 
         writer.groupOneLineWords("SERIE", json("equipment_series"));
+    }
+
+    protected void writeMessagesIfExists() throws JposException {
+        JSONArray messages = this.object.getJSONArray("messages");
+
+        if (!messages.isEmpty()) {
+            this.replicate('-');
+            this.breakLine();
+            for (JSONObject message : messages) {
+                writer.centerWords(message.get("message").toString());
+            }
+        }
+
         this.breakLine();
     }
 

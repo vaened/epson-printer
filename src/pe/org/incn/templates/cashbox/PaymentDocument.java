@@ -74,7 +74,7 @@ abstract class PaymentDocument extends Document {
         this.breakLine();
 
         writer.writeLine(GroupFormatter.instance("Subtotal", json("subtotal")).makeSpaceBetween());
-        writer.writeLine(GroupFormatter.instance("Descuento", json("discount")).makeSpaceBetween());
+        writer.writeLine(GroupFormatter.instance("Dscto/Exoneración", json("discount")).makeSpaceBetween());
         this.totalsAttributes();
         writer.writeLine(GroupFormatter.instance("Total", json("definitive_total")).makeSpaceBetween());
 
@@ -85,6 +85,8 @@ abstract class PaymentDocument extends Document {
         this.separator();
         
         this.writeFooter();
+        
+        this.writeMessagesIfExists();
     }
 
     /**

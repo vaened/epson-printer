@@ -37,6 +37,7 @@ public abstract class NoteTemplate extends Document {
 
         this.breakLine();
         this.writeFooter();
+        this.writeMessagesIfExists();
     }
 
     private void printDocumentHeader() throws JposException {
