@@ -77,10 +77,9 @@ public abstract class Document extends JSONPrintable {
         JSONArray messages = this.object.getJSONArray("messages");
 
         if (!messages.isEmpty()) {
-            this.replicate('-');
             this.breakLine();
             for (JSONObject message : messages) {
-                writer.centerWords(message.get("message").toString());
+                writer.centerBoldWords(message.get("message").toString());
             }
         }
 
