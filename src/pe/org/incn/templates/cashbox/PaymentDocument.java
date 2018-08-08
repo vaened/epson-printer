@@ -84,11 +84,16 @@ abstract class PaymentDocument extends Document {
         this.breakLine();
 
         writer.centerBoldWords(json("legend").toUpperCase());
-
+                
         this.separator();
 
         this.writeFooter();
+        
+        this.breakLine();
 
+        writer.writeBoldLine("Observaciones:");
+        writer.writeBoldLine(json("observation"));
+        
         this.writeMessagesIfExists();
     }
 
