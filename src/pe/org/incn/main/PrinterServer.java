@@ -31,7 +31,7 @@ public class PrinterServer {
 
     protected ServerSocket serverSocket;
 
-    protected final int port = 9005;
+    protected final int port = 9006;
 
     protected Socket connection;
 
