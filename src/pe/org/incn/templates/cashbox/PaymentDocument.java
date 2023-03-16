@@ -91,7 +91,7 @@ abstract class PaymentDocument extends Document {
 
         if (this.has("observation")) {
             this.breakLine();
-            writer.writeBoldLine("Observaciòn:");
+            writer.writeBoldLine("Observación:");
             writer.writeBoldLine(json("observation"));
         }
 
