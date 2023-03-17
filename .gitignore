@@ -6,3 +6,7 @@ build-impl.xml
 private/
 project.xml
 build.xml
+out
+.idea
+src/META-INF
+epson-printer.iml

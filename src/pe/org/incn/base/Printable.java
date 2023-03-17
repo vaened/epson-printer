@@ -153,13 +153,13 @@ public abstract class Printable {
      * @throws JposException
      */
     public Printable replicate(char character, String... comands) throws JposException {
-        String line = "";
+        StringBuilder line = new StringBuilder();
 
         for (int i = 0; i < Configuration.getCanvasMaxWidth(); i++) {
-            line += character;
+            line.append(character);
         }
 
-        this.getWriter().write(line, comands);
+        this.getWriter().write(line.toString(), comands);
         return this;
     }
 
