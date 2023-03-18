@@ -4,5 +4,7 @@ public interface TableColumn {
 
     int length();
 
+    String key();
+
     Alignment alignment();
 }

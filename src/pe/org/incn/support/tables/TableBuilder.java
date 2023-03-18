@@ -18,6 +18,8 @@ public abstract class TableBuilder {
 
     public abstract List<ColumnSchema> items();
 
+    public abstract TableColumn mainColumn();
+
     public void draw(JSONArray array) throws JposException {
         this.printable.replicate('-');
 
@@ -33,16 +35,15 @@ public abstract class TableBuilder {
     }
 
     private void printHeader() throws JposException {
-        ColumnsFormatter formatter = new ColumnsFormatter();
+        RowItemFormatter formatter = new RowItemFormatter(this.mainColumn());
         items().forEach(item -> formatter.push(item.label(), item.column()));
-
         this.printable.getWriter().writeBoldLine(formatter.line());
     }
 
     private void printLine(JSONObject object) throws JposException {
-        ColumnsFormatter formatter = new ColumnsFormatter();
+        RowItemFormatter formatter = new RowItemFormatter(this.mainColumn());
         items().forEach(item -> formatter.push(object.json(item.objectKey()), item.column()));
-
         this.printable.getWriter().writeBoldLine(formatter.line());
+
     }
 }
