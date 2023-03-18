@@ -10,32 +10,45 @@ public class OrderExamDetail extends TableBuilder {
     public OrderExamDetail(JSONPrintable printable) {
         super(printable);
     }
+
     @Override
     public List<ColumnSchema> items() {
         return Arrays.asList(
-                new ColumnSchema("Descripcion", "description", Columns.DESCRIPTION),
-                new ColumnSchema("CPMS", "code", Columns.CPMS)
+                new ColumnSchema("CPMS", "code", Columns.CPMS),
+                new ColumnSchema("Descripcion", "description", Columns.DESCRIPTION)
         );
+    }
+
+    @Override
+    public TableColumn mainColumn() {
+        return Columns.DESCRIPTION;
     }
 }
 
 
 enum Columns implements TableColumn {
 
-    DESCRIPTION(92, Alignment.LEFT),
-    CPMS(8, Alignment.RIGHT);
+    DESCRIPTION(92, "description", Alignment.LEFT),
+    CPMS(8, "code", Alignment.LEFT);
 
     private final int length;
+    private final String key;
     private final Alignment alignment;
 
-    Columns(int length, Alignment alignment) {
+    Columns(int length, String key, Alignment alignment) {
         this.length = length;
+        this.key = key;
         this.alignment = alignment;
     }
 
     @Override
     public int length() {
         return this.length;
+    }
+
+    @Override
+    public String key() {
+        return this.key;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class OrderTemplate extends JSONPrintable {
 
     @Override
     protected void canvas() throws JposException {
+
         this.printDocumentHeader();
 
         this.breakLine();
@@ -23,6 +24,8 @@ public class OrderTemplate extends JSONPrintable {
         this.replicate('-');
 
         this.printBody();
+
+        this.printDetail();
 
         this.printObservations();
     }
@@ -67,13 +70,11 @@ public class OrderTemplate extends JSONPrintable {
         writer.wrapper(
                 w -> w.groupMultiLine("Profesional Tratante", json("medico_name"))
         );
-
-        this.printDetail();
     }
 
     private void printDetail() throws JposException {
         OrderExamDetail table = new OrderExamDetail(this);
-        JSONArray items = this.object.getJSONArray("detail");
+        JSONArray items = this.object.getJSONArray("items");
         table.draw(items);
     }
 
